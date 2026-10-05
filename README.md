@@ -17,7 +17,7 @@ It is a working prototype, not a product. See **Honest status** below.
 
 ## Honest status
 
-### Implemented and verified by the test suite (46 tests)
+### Implemented and verified by the test suite (50 tests)
 
 | Feature | Status |
 |---|---|
@@ -27,7 +27,7 @@ It is a working prototype, not a product. See **Honest status** below.
 | `browse` tool — HTTP fetch + HTML→text | ✅ verified against a local HTTP server |
 | `browse` `mode="dom"` — real headless Chrome renders JS | ✅ verified (script-injected DOM text was returned) |
 | Per-task workspace directory, local backend | ✅ verified |
-| Per-task workspace, Docker backend (image check + fallback) | ⚠️ code verified; container execution untested here (registry rate-limited) |
+| Per-task workspace, Docker backend (fresh container per command, image check + fallback) | ✅ verified (real container exec + file round-trip) |
 | Progress log: `events.jsonl` + live console output | ✅ verified |
 | Long-running task support: `tasks` / `logs` / `resume` (state persisted per step) | ✅ verified, including crash-then-resume |
 | `git_commit` / `git_push` | ✅ verified against a real local remote **and** a real github.com push |
