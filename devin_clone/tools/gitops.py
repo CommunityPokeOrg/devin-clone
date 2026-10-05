@@ -18,6 +18,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 from .base import ToolResult
 
@@ -137,7 +138,9 @@ class GitPushTool:
 
         push_url = url
         env_extra = {"GIT_TERMINAL_PROMPT": "0"}
-        if self.token and "github.com" in url:
+        is_github = url.startswith("git@github.com:") or (
+            urlparse(url).hostname or "").lower() == "github.com"
+        if self.token and is_github:
             if url.startswith("git@github.com:"):
                 url = "https://github.com/" + url.split(":", 1)[1]
             push_url = url.replace("https://",

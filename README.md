@@ -30,10 +30,11 @@ It is a working prototype, not a product. See **Honest status** below.
 | Per-task workspace, Docker backend (image check + fallback) | ⚠️ code verified; container execution untested here (registry rate-limited) |
 | Progress log: `events.jsonl` + live console output | ✅ verified |
 | Long-running task support: `tasks` / `logs` / `resume` (state persisted per step) | ✅ verified, including crash-then-resume |
-| `git_commit` / `git_push` | ✅ verified against a real local git remote |
-| `github_create_pr` via GitHub REST API | ✅ verified against a mock API; **not** against real github.com (needs a token with repo scope) |
+| `git_commit` / `git_push` | ✅ verified against a real local remote **and** a real github.com push |
+| `github_create_pr` via GitHub REST API | ✅ verified against a mock API **and** real github.com (opened + closed PR #1) |
 | OpenAI-compatible LLM client (any `/chat/completions` endpoint) | ✅ wire format verified against a mock server; a real-model run needs your API key |
 | CLI: `run` / `tasks` / `logs` / `resume`, `pip install -e .` | ✅ verified |
+| GitHub Actions CI (pytest on push/PR) | ✅ wired up |
 
 ### Not implemented / known gaps
 
@@ -46,7 +47,7 @@ It is a working prototype, not a product. See **Honest status** below.
 - **Docker sandbox is one container per shell call** — no persistent container
   state between commands (the mounted workspace dir *is* the state).
 - **No diff display, no structured todo list, no UI.** Console + JSONL only.
-- **No CI, packaging metadata beyond `pyproject.toml`, or Windows support.**
+- **No Windows support.**
 
 ## Install
 

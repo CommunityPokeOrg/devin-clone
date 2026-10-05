@@ -121,6 +121,35 @@ def test_create_pr_without_token(tmp_path):
     assert "no GitHub token" in r.output
 
 
+def test_push_no_token_injection_for_proxy_hosts(tmp_path, monkeypatch):
+    """A remote whose HOST isn't github.com must not get the token injected,
+    even if 'github.com' appears in its path (e.g. a git proxy)."""
+    calls = []
+    import devin_clone.tools.gitops as g
+
+    class FakeR:
+        def __init__(self, output="", is_error=False):
+            self.output = output
+            self.is_error = is_error
+
+    def fake_git(cwd, *args, env_extra=None):
+        calls.append(args)
+        if args[:2] == ("remote", "get-url"):
+            return FakeR("https://proxy.example.com/mirror/github.com/o/r.git")
+        if args[:2] == ("rev-parse", "--abbrev-ref"):
+            return FakeR("main")
+        return FakeR("ok")
+
+    monkeypatch.setattr(g, "_git", fake_git)
+    t = g.GitPushTool(tmp_path, token="SECRET_TOK")
+    r = t.run({"branch": "main"})
+    assert not r.is_error
+    push_args = [a for a in calls if a[0] == "push"]
+    # pushed via the remote name, and no token-bearing URL was used
+    assert push_args == [("push", "-u", "origin", "main")]
+    assert all("SECRET_TOK" not in a for args_ in calls for a in args_)
+
+
 def test_push_to_local_remote(tmp_path):
     """git_push works against a file:// remote (no GitHub needed)."""
     remote = tmp_path / "remote.git"
