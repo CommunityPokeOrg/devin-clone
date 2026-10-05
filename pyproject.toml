@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "devin-clone"
+version = "0.1.0"
+description = "A best-effort open-source autonomous AI software engineer, in the style of Devin"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "CommunityPoke" }]
+keywords = ["agent", "llm", "autonomous", "software-engineer"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+devin-clone = "devin_clone.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["devin_clone*"]
